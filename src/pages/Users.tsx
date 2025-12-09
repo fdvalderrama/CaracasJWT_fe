@@ -20,9 +20,9 @@ const Users = () => {
         <tbody>
           {users.map((user) => (
             <tr className="text-center" key={user.id}>
-              <td className="px-2">{user.name}</td>
-              <td className="px-2">{user.email}</td>
-              <td className="px-2">{user.role}</td>
+              <td className="px-2 py-2">{user.name}</td>
+              <td className="px-2 py-2">{user.email}</td>
+              <td className="px-2 py-2">{user.role}</td>
             </tr>
           ))}
         </tbody>
