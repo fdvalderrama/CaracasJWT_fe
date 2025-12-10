@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { LoginRequest } from "../types/LoginRequest";
 
 const Login = () => {
@@ -16,23 +16,26 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("http://localhost:5070/api/Auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginRequest),
+      });
 
-    const response = await fetch("http://localhost:5070/api/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: loginRequest.email,
-        password: loginRequest.password,
-      }),
-    });
+      if (!response.ok) {
+        alert("Credenciales incorrectas");
+        return;
+      }
 
-    const data = await response.json();
-
-    console.log(data);
+      const data = await response.text();
+      localStorage.setItem("token", data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
