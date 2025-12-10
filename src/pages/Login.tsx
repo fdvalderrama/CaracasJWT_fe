@@ -1,11 +1,14 @@
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import type { LoginRequest } from "../types/LoginRequest";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [loginRequest, setLoginRequest] = useState<LoginRequest>({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, type, value } = e.target;
@@ -16,8 +19,10 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      e.preventDefault();
+
       const response = await fetch("http://localhost:5070/api/Auth", {
         method: "POST",
         headers: {
@@ -33,6 +38,7 @@ const Login = () => {
 
       const data = await response.text();
       localStorage.setItem("token", data);
+      navigate("/home");
     } catch (e) {
       console.log(e);
     }
